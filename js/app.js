@@ -1,10 +1,24 @@
-/*
- * Create a list that holds all of your cards
- */
-let cardsNodeList = document.querySelectorAll(".card");
+// List that holds all the cards
+const cards = ["fa-diamond", "fa-diamond", "fa-paper-plane-o", "fa-paper-plane-o",
+               "fa-anchor", "fa-anchor", "fa-bolt", "fa-bolt", "fa-cube", "fa-cube",
+               "fa-leaf", "fa-leaf", "fa-bicycle", "fa-bicycle", "fa-bomb", "fa-bomb"]
 
-let cardsArray = Array.from(cardsNodeList);
-console.log(cardsArray);
+// Creates a new set of shuffled cards on the deck
+function initGame() {
+  const board = document.querySelector('.deck');
+
+  const cardsArray = cards.map(function(card) {
+    return generateCard(card);
+  });
+
+  board.innerHTML = shuffle(cardsArray).join("");
+}
+
+function generateCard(card) {
+  return `<li class="card"><i class="fa ${card}"></i></li>`;
+}
+
+initGame();
 
 /*
  * Display the cards on the page
@@ -14,21 +28,21 @@ console.log(cardsArray);
  */
 
 let currentCards = document.querySelectorAll(".card");
-currentCards = Array.from(currentCards);
+// currentCards = Array.from(currentCards);
 
 let openCards = [];
 
 
+// Adds flip functionality to each card
 function flip(currentCards) {
-
 
   currentCards.forEach(function(card) {
     card.addEventListener("click", function() {
 
-      // ensures we're only able to click on blank cards
+      // Ensures we're only able to click only once on cards
       if (card.classList.length === 1) {
 
-        // only allows for 2 cards to be revealed
+        // Only allows for 2 cards to be revealed
         if (openCards.length < 2) {
           openCards.push(card);
           card.classList.add("open", "show");
@@ -40,18 +54,24 @@ function flip(currentCards) {
         if (openCards.length === 2) {
           // checks to see if the cards are matching based on their font-awesome icon
           if (openCards[0].children[0].className === openCards[1].children[0].className) {
+            openCards[0].classList.add("match");
+            openCards[1].classList.add("match");
             console.log("Its a match!");
+            openCards = [];
           // if not matched, hides the cards again after 1sec delay
           } else {
             setTimeout(function() {
               openCards.forEach(function(card) {
                 card.classList.remove("open", "show");
               });
+              openCards = [];
               console.log("classes for non-matching cards have been removed")
             }, 1000);
           }
+
         }
       }
+
 
     });
   });
