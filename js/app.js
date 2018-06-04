@@ -2,7 +2,6 @@
  * Create a list that holds all of your cards
  */
  let cardsNodeList = document.querySelectorAll(".card");
- console.log("unshuffled cards: ", cardsNodeList);
 
  let cardsArray = Array.from(cardsNodeList);
  console.log(cardsArray);
@@ -13,9 +12,19 @@
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
- console.log("this has been shuffled: ", shuffle(cardsArray));
 
+ let currentCards = document.querySelectorAll(".card");
+ currentCards = Array.from(currentCards);
 
+ function flip(currentCards) {
+   currentCards.forEach(function(card){
+     card.addEventListener("click", function(){
+     card.classList.add("open", "show");
+    });
+   });
+ }
+
+flip(currentCards);
 
 
 // Shuffle function from http://stackoverflow.com/a/2450976
