@@ -1,7 +1,11 @@
 /*
  * Create a list that holds all of your cards
  */
+ let cardsNodeList = document.querySelectorAll(".card");
+ console.log("unshuffled cards: ", cardsNodeList);
 
+ let cardsArray = Array.from(cardsNodeList);
+ console.log(cardsArray);
 
 /*
  * Display the cards on the page
@@ -9,9 +13,14 @@
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+ console.log("this has been shuffled: ", shuffle(cardsArray));
+
+
+
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
+    console.log("cards shuffled");
     var currentIndex = array.length, temporaryValue, randomIndex;
 
     while (currentIndex !== 0) {
@@ -24,6 +33,7 @@ function shuffle(array) {
 
     return array;
 }
+
 
 
 /*
