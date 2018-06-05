@@ -34,8 +34,8 @@ let currentCards = document.querySelectorAll(".card");
 // currentCards = Array.from(currentCards);
 
 let openCards = [];
-let moves = 0;
-
+let moves = 8;
+let score = 0;
 const movesCounter = document.querySelector(".moves");
 
 // Adds flip functionality to each card
@@ -52,6 +52,7 @@ function flip(currentCards) {
           openCards.push(card);
           card.classList.add("open", "show");
           incrementMoves();
+          decrementStar(moves);
           console.log(openCards);
           console.log("card child ", card.children[0].className);
         }
@@ -76,6 +77,9 @@ function flip(currentCards) {
 
       }
 
+      if (score === 8) {
+        board.innerHTML = "You Win"
+      }
 
 
 
@@ -83,10 +87,35 @@ function flip(currentCards) {
   });
 }
 
+const starList = document.querySelector('.stars');
+
+const star3 = starList.children[2].children[0];
+const star2 = starList.children[1].children[0];
+const star1 = starList.children[0].children[0];
+
+function decrementStar(moves) {
+    switch(moves) {
+      case 10:
+        star3.classList.remove("fa", "fa-star");
+        star3.classList.add("fa","fa-star-o");
+        break;
+      case 20:
+        star2.classList.remove("fa", "fa-star");
+        star2.classList.add("fa","fa-star-o");
+        break;
+      case 30:
+        star1.classList.remove("fa", "fa-star");
+        star1.classList.add("fa","fa-star-o");
+        break;
+    }
+}
+
+
 // Add 'match' class to each card
 function matchCards(openCards) {
   console.log("Its a match!");
-
+  score++;
+  console.log("score: ", score);
   openCards.forEach(function(card) {
     card.classList.add("match");
   });
