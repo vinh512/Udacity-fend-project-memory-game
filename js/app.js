@@ -51,14 +51,16 @@ function flip(currentCards) {
         if (openCards.length < 2) {
           openCards.push(card);
           card.classList.add("open", "show");
-          incrementMoves();
-          decrementStar(moves);
+
+
           console.log(openCards);
           console.log("card child ", card.children[0].className);
         }
 
         // now that we have 2 cards selected, we check to see if they match otherwise re-hide them
         if (openCards.length === 2) {
+          incrementMoves();
+          decrementStar(moves);
           // checks to see if the cards are matching based on their font-awesome icon
           if (openCards[0].children[0].className === openCards[1].children[0].className) {
             matchCards(openCards);
