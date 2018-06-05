@@ -1,11 +1,14 @@
 // List that holds all the cards
 const cards = ["fa-diamond", "fa-diamond", "fa-paper-plane-o", "fa-paper-plane-o",
-               "fa-anchor", "fa-anchor", "fa-bolt", "fa-bolt", "fa-cube", "fa-cube",
-               "fa-leaf", "fa-leaf", "fa-bicycle", "fa-bicycle", "fa-bomb", "fa-bomb"]
+  "fa-anchor", "fa-anchor", "fa-bolt", "fa-bolt", "fa-cube", "fa-cube",
+  "fa-leaf", "fa-leaf", "fa-bicycle", "fa-bicycle", "fa-bomb", "fa-bomb"
+]
+
+const board = document.querySelector('.deck');
 
 // Creates a new set of shuffled cards on the deck
 function initGame() {
-  const board = document.querySelector('.deck');
+
 
   const cardsArray = cards.map(function(card) {
     return generateCard(card);
@@ -31,7 +34,9 @@ let currentCards = document.querySelectorAll(".card");
 // currentCards = Array.from(currentCards);
 
 let openCards = [];
+let moves = 0;
 
+const movesCounter = document.querySelector(".moves");
 
 // Adds flip functionality to each card
 function flip(currentCards) {
@@ -46,6 +51,7 @@ function flip(currentCards) {
         if (openCards.length < 2) {
           openCards.push(card);
           card.classList.add("open", "show");
+          incrementMoves();
           console.log(openCards);
           console.log("card child ", card.children[0].className);
         }
@@ -54,11 +60,9 @@ function flip(currentCards) {
         if (openCards.length === 2) {
           // checks to see if the cards are matching based on their font-awesome icon
           if (openCards[0].children[0].className === openCards[1].children[0].className) {
-            openCards[0].classList.add("match");
-            openCards[1].classList.add("match");
-            console.log("Its a match!");
+            matchCards(openCards);
             openCards = [];
-          // if not matched, hides the cards again after 1sec delay
+            // if not matched, hides the cards again after 1sec delay
           } else {
             setTimeout(function() {
               openCards.forEach(function(card) {
@@ -68,13 +72,30 @@ function flip(currentCards) {
               console.log("classes for non-matching cards have been removed")
             }, 1000);
           }
-
         }
+
       }
+
+
 
 
     });
   });
+}
+
+// Add 'match' class to each card
+function matchCards(openCards) {
+  console.log("Its a match!");
+
+  openCards.forEach(function(card) {
+    card.classList.add("match");
+  });
+}
+
+// Increments the number of player moves
+function incrementMoves() {
+  moves++;
+  movesCounter.textContent = moves;
 }
 
 flip(currentCards);
