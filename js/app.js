@@ -1,27 +1,3 @@
-// List that holds all the cards
-const cards = ["fa-diamond", "fa-diamond", "fa-paper-plane-o", "fa-paper-plane-o",
-  "fa-anchor", "fa-anchor", "fa-bolt", "fa-bolt", "fa-cube", "fa-cube",
-  "fa-leaf", "fa-leaf", "fa-bicycle", "fa-bicycle", "fa-bomb", "fa-bomb"
-]
-
-const board = document.querySelector('.deck');
-
-// Creates a new set of shuffled cards on the deck
-function initGame() {
-
-
-  const cardsArray = cards.map(function(card) {
-    return generateCard(card);
-  });
-
-  board.innerHTML = shuffle(cardsArray).join("");
-}
-
-function generateCard(card) {
-  return `<li class="card"><i class="fa ${card}"></i></li>`;
-}
-
-initGame();
 
 /*
  * Display the cards on the page
@@ -30,13 +6,66 @@ initGame();
  *   - add each card's HTML to the page
  */
 
-let currentCards = document.querySelectorAll(".card");
-// currentCards = Array.from(currentCards);
+// List that holds all the cards
+const cards = ["fa-diamond", "fa-diamond", "fa-paper-plane-o", "fa-paper-plane-o",
+  "fa-anchor", "fa-anchor", "fa-bolt", "fa-bolt", "fa-cube", "fa-cube",
+  "fa-leaf", "fa-leaf", "fa-bicycle", "fa-bicycle", "fa-bomb", "fa-bomb"];
+
+const board = document.querySelector('.deck');
+const movesCounter = document.querySelector(".moves");
+const restartBtn = document.querySelector(".restart");
 
 let openCards = [];
-let moves = 8;
+let moves = 0;
 let score = 0;
-const movesCounter = document.querySelector(".moves");
+
+const starContainer = document.querySelector('.stars');
+const starList = document.querySelector('.stars').children;
+const star3 = starList[2].children[0];
+const star2 = starList[1].children[0];
+const star1 = starList[0].children[0];
+
+// Creates a new set of shuffled cards on the deck
+function initGame() {
+  console.log("game started");
+  resetMovesCounter();
+  resetStarList();
+  const cardsArray = cards.map(function(card) {
+    console.log("card generated");
+    return generateCard(card);
+  });
+  board.innerHTML = shuffle(cardsArray).join("");
+}
+
+function resetMovesCounter() {
+  moves = 0;
+  movesCounter.textContent = moves;
+}
+
+function resetStarList() {
+  star3.classList = "";
+  star3.classList.add("fa","fa-star");
+  star2.classList = "";
+  star2.classList.add("fa","fa-star");
+  star1.classList = "";
+  star1.classList.add("fa","fa-star");
+}
+
+// Creates the HTML for the card with symbol
+function generateCard(card) {
+  return `<li class="card"><i class="fa ${card}"></i></li>`;
+}
+
+restartBtn.addEventListener("click", startGame);
+
+function startGame() {
+  score = 0;
+  initGame();
+  let currentCards = document.querySelectorAll(".card");
+  flip(currentCards);
+}
+
+startGame();
 
 // Adds flip functionality to each card
 function flip(currentCards) {
@@ -51,8 +80,6 @@ function flip(currentCards) {
         if (openCards.length < 2) {
           openCards.push(card);
           card.classList.add("open", "show");
-
-
           console.log(openCards);
           console.log("card child ", card.children[0].className);
         }
@@ -83,35 +110,27 @@ function flip(currentCards) {
         board.innerHTML = "You Win"
       }
 
-
-
     });
   });
 }
 
-const starList = document.querySelector('.stars');
-
-const star3 = starList.children[2].children[0];
-const star2 = starList.children[1].children[0];
-const star1 = starList.children[0].children[0];
-
+// Decements the star counter
 function decrementStar(moves) {
     switch(moves) {
-      case 10:
-        star3.classList.remove("fa", "fa-star");
+      case 5:
+        star3.classList = "";
         star3.classList.add("fa","fa-star-o");
         break;
-      case 20:
-        star2.classList.remove("fa", "fa-star");
+      case 10:
+        star2.classList = "";
         star2.classList.add("fa","fa-star-o");
         break;
-      case 30:
-        star1.classList.remove("fa", "fa-star");
+      case 15:
+        star1.classList = "";
         star1.classList.add("fa","fa-star-o");
         break;
     }
 }
-
 
 // Add 'match' class to each card
 function matchCards(openCards) {
@@ -128,9 +147,6 @@ function incrementMoves() {
   moves++;
   movesCounter.textContent = moves;
 }
-
-flip(currentCards);
-
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
