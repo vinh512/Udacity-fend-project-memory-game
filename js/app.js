@@ -1,32 +1,41 @@
+// I referenced resouces from Udacity's own Mike Wales & W3 online
+
 // List that holds all the cards
 const cards = ["fa-diamond", "fa-diamond", "fa-paper-plane-o", "fa-paper-plane-o",
   "fa-anchor", "fa-anchor", "fa-bolt", "fa-bolt", "fa-cube", "fa-cube",
   "fa-leaf", "fa-leaf", "fa-bicycle", "fa-bicycle", "fa-bomb", "fa-bomb"
 ];
 
+// Getting HTML node elements
 const board = document.querySelector('.deck');
 const movesCounter = document.querySelector(".moves");
 const restartBtn = document.querySelector(".restart");
 const playAgainBtn = document.querySelector("button");
+const starList = document.querySelector('.stars').children;
 const modal = document.getElementById('myModal');
+const timeResult = document.querySelector("#timeResult");
+const starCountElement = document.querySelector("#starCount");
+const scorePanel = document.querySelector(".score-panel");
+const timerNode = document.querySelector(".timer");
 
+// Variables for game logic
+const scoreTotal = 8;
 let openCards = [];
 let moves = 0;
 let score = 0;
-const scoreTotal = 8;
+let starCount = 3;
+let initialClick = 0;
 
-const starList = document.querySelector('.stars').children;
+// Variables for the star grading system
 const star3 = starList[2].children[0];
 const star2 = starList[1].children[0];
 const star1 = starList[0].children[0];
 
-let timer, time;
+// Variables for the timer
+let timer;
+let time;
 let seconds = 0;
 let minutes = 0;
-
-const timerNode = document.querySelector(".timer");
-const scorePanel = document.querySelector(".score-panel");
-let initialClick = 0;
 
 // Starts Game
 function startGame() {
@@ -39,6 +48,7 @@ function startGame() {
 function initGame() {
   score = 0;
   initialClick = 0;
+  starCount = 3;
   timerNode.textContent = "0:00";
   clearTimer();
   resetMovesCounter();
@@ -59,7 +69,6 @@ function initGame() {
   playAgainBtn.addEventListener("click", function() {
     modal.style.display = "none";
   })
-
 }
 
 // Creates the HTML for the card with symbol
@@ -133,6 +142,7 @@ function flip(currentCards) {
   });
 }
 
+// Win game
 function gameWin() {
   board.innerHTML = "";
   clearTimer();
@@ -143,10 +153,12 @@ function gameWin() {
 function decrementStar(moves) {
   switch (moves) {
     case 10:
+      starCount--;
       star3.classList = "";
       star3.classList.add("fa", "fa-star-o");
       break;
     case 20:
+      starCount--;
       star2.classList = "";
       star2.classList.add("fa", "fa-star-o");
       break;
@@ -211,9 +223,11 @@ function shuffle(array) {
   return array;
 }
 
-// Displays win message modal
+// Displays win modal
 function displayWinModal() {
   modal.style.display = "block";
+  timeResult.innerHTML = timerNode.textContent;
+  starCountElement.innerHTML = starCount;
 }
 
 // Begins game
