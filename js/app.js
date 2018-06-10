@@ -1,11 +1,14 @@
 // List that holds all the cards
 const cards = ["fa-diamond", "fa-diamond", "fa-paper-plane-o", "fa-paper-plane-o",
   "fa-anchor", "fa-anchor", "fa-bolt", "fa-bolt", "fa-cube", "fa-cube",
-  "fa-leaf", "fa-leaf", "fa-bicycle", "fa-bicycle", "fa-bomb", "fa-bomb"];
+  "fa-leaf", "fa-leaf", "fa-bicycle", "fa-bicycle", "fa-bomb", "fa-bomb"
+];
 
 const board = document.querySelector('.deck');
 const movesCounter = document.querySelector(".moves");
 const restartBtn = document.querySelector(".restart");
+const playAgainBtn = document.querySelector("button");
+const modal = document.getElementById('myModal');
 
 let openCards = [];
 let moves = 0;
@@ -48,6 +51,15 @@ function initGame() {
 
   // Displays cards on board
   board.innerHTML = shuffle(cardsArray).join("");
+
+  // Pressing the restart button restarts the game
+  restartBtn.addEventListener("click", startGame);
+
+  // Allows user to replay game upon button press within the modal
+  playAgainBtn.addEventListener("click", function() {
+    modal.style.display = "none";
+  })
+
 }
 
 // Creates the HTML for the card with symbol
@@ -64,11 +76,11 @@ function resetMovesCounter() {
 // Resets back to 3 stars
 function resetStarList() {
   star3.classList = "";
-  star3.classList.add("fa","fa-star");
+  star3.classList.add("fa", "fa-star");
   star2.classList = "";
-  star2.classList.add("fa","fa-star");
+  star2.classList.add("fa", "fa-star");
   star1.classList = "";
-  star1.classList.add("fa","fa-star");
+  star1.classList.add("fa", "fa-star");
 }
 
 // Adds flip functionality and gameplay logic to each card
@@ -107,32 +119,38 @@ function flip(currentCards) {
         }
       }
 
-      // Win condition once all 8 pairs have matched
-      if (score === scoreTotal) {
-        board.innerHTML = "You Win"
-        clearTimer();
-      }
-
       // Starts timer on initial click of card
       if (initialClick === 1) {
         setTimer();
       }
+
+      // Win condition once all 8 pairs have matched
+      if (score === scoreTotal) {
+        gameWin();
+      }
+
     });
   });
 }
 
+function gameWin() {
+  board.innerHTML = "";
+  clearTimer();
+  displayWinModal();
+}
+
 // Decements the star counter
 function decrementStar(moves) {
-    switch(moves) {
-      case 10:
-        star3.classList = "";
-        star3.classList.add("fa","fa-star-o");
-        break;
-      case 20:
-        star2.classList = "";
-        star2.classList.add("fa","fa-star-o");
-        break;
-    }
+  switch (moves) {
+    case 10:
+      star3.classList = "";
+      star3.classList.add("fa", "fa-star-o");
+      break;
+    case 20:
+      star2.classList = "";
+      star2.classList.add("fa", "fa-star-o");
+      break;
+  }
 }
 
 // Add 'match' class to each card
@@ -150,20 +168,23 @@ function incrementMoves() {
 }
 
 // Starts timer
-function setTimer(){
-  console.log("Timer has been started!")
+function setTimer() {
   timer = setInterval(function() {
     seconds++;
+
+    // prepends a 0 to single digit seconds
     if (seconds <= 9) {
       seconds = "0" + seconds;
     }
+
+    // turns seconds into minutes
     if (seconds === 60) {
       seconds = "00";
       minutes++;
     }
+
     time = `${minutes}:${seconds}`;
     timerNode.textContent = time;
-    console.log(`${minutes}:${seconds}`)
   }, 1000);
 }
 
@@ -176,7 +197,6 @@ function clearTimer() {
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-  console.log("cards shuffled");
   var currentIndex = array.length,
     temporaryValue, randomIndex;
 
@@ -191,8 +211,10 @@ function shuffle(array) {
   return array;
 }
 
-// Pressing the restart button restarts the game
-restartBtn.addEventListener("click", startGame);
+// Displays win message modal
+function displayWinModal() {
+  modal.style.display = "block";
+}
 
 // Begins game
 startGame();
