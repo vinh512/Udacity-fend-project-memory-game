@@ -44,8 +44,9 @@ function startGame() {
   flip(currentCards);
 }
 
-// Creates a new set of shuffled cards on the deck
+// Creates a new set of shuffled cards on the deck & sets values to default
 function initGame() {
+  openCards = [];
   score = 0;
   initialClick = 0;
   starCount = 3;
@@ -97,8 +98,8 @@ function flip(currentCards) {
   currentCards.forEach(function(card) {
     card.addEventListener("click", function() {
 
-      // Ensures we're only able to click only once on cards
-      if (card.classList.length === 1) {
+      // Ensures we're only able to click on cards that are not opened
+      if (!card.className.includes("open")) {
 
         // increments click to prevent timer from constantly running
         initialClick++;
@@ -149,7 +150,7 @@ function gameWin() {
   displayWinModal();
 }
 
-// Decements the star counter
+// Decrements the star counter
 function decrementStar(moves) {
   switch (moves) {
     case 10:
