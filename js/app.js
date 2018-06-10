@@ -25,6 +25,36 @@ const star3 = starList[2].children[0];
 const star2 = starList[1].children[0];
 const star1 = starList[0].children[0];
 
+let timer, time;
+let seconds = 0;
+let minutes = 0;
+
+const timerNode = document.querySelector(".timer");
+const scorePanel = document.querySelector(".score-panel");
+let initialClick = 0;
+
+function setTimer(){
+  console.log("Timer has been started!")
+  timer = setInterval(function() {
+    seconds++;
+    if (seconds <= 9) {
+      seconds = "0" + seconds;
+    }
+    if (seconds === 60) {
+      seconds = "00";
+      minutes++;
+    }
+    time = `${minutes}:${seconds}`;
+    timerNode.textContent = time;
+    console.log(`${minutes}:${seconds}`)
+  }, 1000);
+}
+
+function clearTimer() {
+  clearInterval(timer);
+}
+
+
 // Creates a new set of shuffled cards on the deck
 function initGame() {
   console.log("game started");
@@ -60,9 +90,12 @@ restartBtn.addEventListener("click", startGame);
 
 function startGame() {
   score = 0;
+  seconds = 0;
+  clearInterval(timer);
   initGame();
   let currentCards = document.querySelectorAll(".card");
   flip(currentCards);
+
 }
 
 startGame();
@@ -75,6 +108,8 @@ function flip(currentCards) {
 
       // Ensures we're only able to click only once on cards
       if (card.classList.length === 1) {
+
+        initialClick++;
 
         // Only allows for 2 cards to be revealed
         if (openCards.length < 2) {
@@ -106,12 +141,19 @@ function flip(currentCards) {
 
       }
 
+
       if (score === 8) {
         board.innerHTML = "You Win"
       }
 
+      if (initialClick === 1) {
+        setTimer();
+      }
+
     });
   });
+
+
 }
 
 // Decements the star counter
